@@ -1,0 +1,312 @@
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Контроль качества — прототип</title><style>
+*{box-sizing:border-box}body{margin:0;font-family:Inter,Arial,sans-serif;background:#f3f5f7;color:#20252b}.top{height:64px;background:#fff;border-bottom:1px solid #e2e6ea;display:flex;align-items:center;padding:0 28px;gap:18px}.logo{font-weight:800;color:#1d62d8}.title{font-size:18px;font-weight:700}.wrap{display:grid;grid-template-columns:240px 1fr;min-height:calc(100vh - 64px)}.side{background:#fff;border-right:1px solid #e2e6ea;padding:22px 14px}.nav{padding:12px 14px;border-radius:9px;margin:4px 0;color:#606871}.nav.active{background:#eaf2ff;color:#1d62d8;font-weight:700}.main{padding:28px;max-width:1400px;width:100%;margin:auto}.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:20px 0}.metric{background:#fff;border:1px solid #e1e5e9;border-radius:12px;padding:18px}.metric b{font-size:28px}.grid{display:grid;grid-template-columns:1.7fr 1fr;gap:18px}.panel{background:#fff;border:1px solid #e1e5e9;border-radius:14px;padding:18px}.row{display:flex;justify-content:space-between;align-items:center;padding:15px 0;border-bottom:1px solid #edf0f2;gap:18px}.row:last-child{border-bottom:0}.tag{font-size:12px;padding:5px 9px;border-radius:20px;background:#edf3ff;color:#2563c7;white-space:nowrap}.tag.warn{background:#fff3d9;color:#9a6500}.tag.red{background:#ffe5e5;color:#b42318}.tag.green{background:#e7f7ed;color:#16733b}.tag.gray{background:#eef1f4;color:#66717c}.btn{border:0;border-radius:8px;padding:9px 13px;background:#2067d8;color:#fff;cursor:pointer}.btn.secondary{background:#eef2f6;color:#303942}.toast{position:fixed;right:22px;bottom:22px;width:390px;background:#20252b;color:#fff;border-radius:13px;padding:16px;box-shadow:0 10px 35px #0003;display:none;z-index:5}.toast.show{display:block}.toast small{color:#c8d0d8}.hero{display:flex;justify-content:space-between;align-items:center;gap:20px}.hero h1{margin:0 0 5px}.muted{color:#727b84;font-size:14px}.modal{position:fixed;inset:0;background:#0005;display:none;align-items:center;justify-content:center;z-index:4}.modal.show{display:flex}.modalbox{width:min(760px,92vw);background:white;border-radius:16px;padding:24px}.modalbox img{max-width:100%;max-height:340px;object-fit:contain;border:1px solid #e3e6e8;border-radius:10px}.actions{display:flex;gap:8px;justify-content:flex-end;margin-top:18px}.timer{font-weight:700}.pulse{animation:pulse 1.2s infinite}@keyframes pulse{50%{opacity:.45}}.sortbar{display:flex;justify-content:space-between;align-items:center;gap:16px;margin:22px 0 8px}.sortbox{display:flex;align-items:center;gap:10px;background:#fff;border:1px solid #e1e5e9;border-radius:10px;padding:9px 12px;font-size:13px}.sortbox select{border:0;background:transparent;font-weight:700;color:#26313b;outline:none;cursor:pointer}.priority{margin:0 0 10px;padding:10px 12px;border-radius:10px;background:#f7f9fb;border:1px solid #e7eaee;font-size:13px;color:#5f6871}.priority b{color:#20252b}.priority .arrow{color:#9aa3ab;padding:0 5px}.rank{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:#eaf2ff;color:#1d62d8;font-weight:800;flex:none}.rowmain{display:flex;align-items:center;gap:12px;min-width:0}.rowmain>div:last-child{min-width:0}.rowtitle{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.type{font-size:11px;padding:3px 7px;border-radius:6px;background:#f0f3f6;color:#58636d;font-weight:700}.urgentline{font-size:12px;color:#7a838c;margin-top:4px}.legend{display:grid;gap:12px}.legenditem{display:flex;gap:10px;align-items:flex-start}.num{width:24px;height:24px;border-radius:50%;background:#eaf2ff;color:#1d62d8;font-weight:800;display:flex;align-items:center;justify-content:center;flex:none}.legenditem p{margin:0}.legenditem small{color:#727b84}.empty{padding:24px;text-align:center;color:#7b848c}.reorder{font-size:12px;color:#2067d8;font-weight:700}
+.nextcard{margin:0 0 22px;background:#fff;border:2px solid #2067d8;border-radius:16px;padding:20px;box-shadow:0 6px 24px #2067d81a}
+.nexthead{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:14px}
+.nextlabel{font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:#2067d8}
+.nextbody{display:flex;justify-content:space-between;align-items:center;gap:18px}
+.nexttitle{font-size:22px;font-weight:800;margin:3px 0 6px}
+.nextmeta{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.nextactions{display:flex;gap:8px;flex-wrap:wrap}
+.btn.outline{background:#fff;color:#2067d8;border:1px solid #b9d0f7}
+ .priorityBadge{display:inline-flex;align-items:center;gap:6px;font-size:12px;padding:5px 9px;border-radius:20px;background:#eaf2ff;color:#1d62d8;font-weight:800}.cardinfo{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:18px 0 4px}.infoitem{background:#f7f9fb;border:1px solid #e5e9ed;border-radius:10px;padding:11px 13px}.infoitem span{display:block;color:#7a838c;font-size:12px;margin-bottom:4px}.infoitem b{font-size:15px}.infoitem.full{grid-column:1/-1}.infoitem a{color:#2067d8;font-weight:700;text-decoration:none}.infoitem a:hover{text-decoration:underline}@media(max-width:600px){.cardinfo{grid-template-columns:1fr}.infoitem.full{grid-column:auto}}
+@media(max-width:700px){.nextbody{align-items:flex-start;flex-direction:column}.nextactions{width:100%}.nextactions .btn{flex:1}}
+
+@media(max-width:1000px){.wrap{grid-template-columns:1fr}.side{display:none}.cards,.grid{grid-template-columns:1fr}.hero,.sortbar{align-items:flex-start;flex-direction:column}.sortbox{width:100%}.sortbox select{width:100%}}
+.noticeRow{display:flex;justify-content:space-between;gap:14px;align-items:center;padding:12px 0;border-bottom:1px solid #e9edf1}.noticeRow:last-child{border-bottom:0}.mycard{background:#fff;border:1px solid #e1e7ee;border-radius:10px;padding:12px;margin-top:10px}.mycard b{font-size:15px}@media(max-width:700px){.top{padding:0 14px}.top .title{display:none}}
+
+.specialistOverlay{display:none;position:fixed;right:18px;bottom:18px;width:380px;min-width:300px;min-height:220px;z-index:20;background:#fff;border:1px solid #dce4ec;border-radius:16px;box-shadow:0 16px 50px #18243333;overflow:hidden}.specialistOverlay.show{display:block}.spHead{background:#075aa8;cursor:grab;user-select:none;color:#fff;padding:13px 15px;display:flex;align-items:center;justify-content:space-between}.spHead b{font-size:13px}.spHead.dragging{cursor:grabbing}.dragHint{font-size:10px;opacity:.75;margin-left:8px}.spHead .online{font-size:11px;opacity:.9}.spBody{padding:10px;background:#f8fafc;max-height:70vh;overflow:auto}.spSection{background:#fff;border:1px solid #e3e8ee;border-radius:10px;margin-bottom:8px;overflow:hidden}.spSectionHead{display:flex;align-items:center;justify-content:space-between;padding:11px 12px;cursor:pointer;font-weight:800;font-size:13px}.spSectionHead small{font-weight:700;color:#68737d}.spSub{display:flex;justify-content:space-between;padding:8px 12px;border-top:1px solid #edf0f2;font-size:12px;cursor:pointer}.spSub:hover,.spItem:hover{background:#f5f9ff}.spSectionHead .chevron,.spSub .chevron{font-size:11px;color:#7b8792;transition:transform .15s ease;display:inline-block;margin-right:6px}.spSection.collapsed>.spSectionBody,.spSub.is-collapsed + .spSubList{display:none!important}.spSection.collapsed .chevron,.spSub.is-collapsed .chevron{transform:rotate(-90deg)}.spSectionHead,.spSub{user-select:none}.spItem{padding:10px 12px;border-top:1px solid #edf0f2;cursor:pointer}.spItemTitle{font-size:12px;font-weight:800;line-height:1.35}.spItemMeta{font-size:11px;color:#77818a;margin-top:4px;display:flex;justify-content:space-between;gap:8px}.spItem a{color:#1769d5;font-weight:800;text-decoration:none;white-space:nowrap}.spFoot{padding:9px 12px;border-top:1px solid #e6ebef;text-align:center;font-size:11px;color:#65717b;background:#fff}.clickHint{font-size:10px;color:#1769d5;margin-top:5px}.collapsedBadge{display:none;position:fixed;right:18px;bottom:18px;z-index:20;background:#075aa8;color:#fff;border-radius:20px;padding:10px 14px;box-shadow:0 12px 35px #18243333;font-size:12px;font-weight:800;cursor:pointer}.collapsedBadge.show{display:block}.spResizeHandle{position:absolute;right:5px;bottom:5px;width:18px;height:18px;cursor:nwse-resize;z-index:3}.spResizeHandle:before{content:"";position:absolute;right:2px;bottom:2px;width:10px;height:10px;background:linear-gradient(135deg,transparent 0 38%,#8b98a5 40% 48%,transparent 50% 60%,#8b98a5 62% 70%,transparent 72%);opacity:.9}.spResizeHandle:hover:before{opacity:1}.spBody{padding:10px;background:#f8fafc;max-height:70vh;overflow:auto}
+.pagination{display:flex;align-items:center;justify-content:center;gap:6px;margin-top:14px;padding-top:12px;border-top:1px solid #edf0f2;flex-wrap:wrap}.pagebtn{min-width:34px;height:34px;border:1px solid #dfe5ea;background:#fff;color:#44505b;border-radius:8px;cursor:pointer;font-weight:700}.pagebtn:hover{border-color:#2067d8;color:#2067d8}.pagebtn.active{background:#2067d8;color:#fff;border-color:#2067d8}.pagebtn:disabled{opacity:.45;cursor:default}.pageinfo{font-size:12px;color:#727b84;margin:0 6px}.spPagination{display:flex;justify-content:center;align-items:center;gap:5px;padding:8px 0 2px}.spPageBtn{min-width:28px;height:28px;border:1px solid #dfe5ea;background:#fff;border-radius:7px;color:#4d5862;cursor:pointer;font-size:12px;font-weight:700}.spPageBtn.active{background:#2067d8;color:#fff;border-color:#2067d8}.spPageBtn:disabled{opacity:.45;cursor:default}.spPageInfo{font-size:11px;color:#7a838c;margin:0 4px}</style><link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%231b9b55'/%3E%3Ctext x='32' y='45' text-anchor='middle' font-family='Arial,sans-serif' font-size='38' font-weight='800' fill='white'%3EК%3C/text%3E%3C/svg%3E"><meta name="theme-color" content="#1b9b55">
+</head><body><div class="top"><div class="logo" style="width:34px;height:34px;border-radius:9px;background:#1b9b55;color:#fff;display:flex;align-items:center;justify-content:center;font-size:21px;font-weight:900">К</div><div class="title">Контроль качества · Bitrix24</div><div style="margin-left:auto;display:flex;align-items:center;gap:10px"><span class="muted">Пользователь:</span><select id="userSelect" onchange="changeUser()" style="border:1px solid #dfe4e8;border-radius:8px;padding:8px 10px;background:#fff;font-weight:700"><option value="head">Руководитель отдела качества</option><option value="Анна">Анна · проверяющий</option><option value="Олег">Олег · проверяющий</option><option value="Мария">Мария · проверяющий</option><option value="Илья">Илья · проверяющий</option></select><button class="btn secondary" id="soundBtn" onclick="toggleSound()" title="Включить/выключить звуковые оповещения">🔊 Звук: ВКЛ</button><button class="btn outline" onclick="testSound()">Проверить звук</button></div></div><div class="wrap"><aside class="side"><div class="nav active">Обзор</div><div class="nav">Карточки в «Новое»</div><div class="nav">Уведомления</div><div class="nav">Настройки</div></aside><main class="main"><div class="hero"><div><h1>Контроль воронки качества</h1><div class="muted">СП · ПБ · Секции · Первичные секции · Актив · остальные проверки</div></div><button class="btn" onclick="simulateNew()">Смоделировать вход в «Новое»</button></div><section class="cards"><div class="metric"><div class="muted">Сейчас в «Новое»</div><b id="newCount">6</b></div><div class="metric"><div class="muted">Без проверяющего</div><b id="unassigned">1</b></div><div class="metric"><div class="muted">Ждут &gt; 10 мин</div><b id="overdue">1</b></div><div class="metric"><div class="muted">Повторные проверки</div><b id="rechecks">4</b></div></section><section class="panel" style="margin:0 0 18px;background:#fffdf7;border-color:#f0dfb2"><div class="noticeRow"><div><b>🔊 Звуковые оповещения</b><div class="muted">При новом событии приложение показывает уведомление и проигрывает чуть более длинный «противный» сигнал, чтобы его точно нельзя было пропустить.</div></div><div style="display:flex;gap:8px;align-items:center"><span class="tag warn" id="soundState">Звук включён</span><button class="btn outline" onclick="testSound()">Тестовый сигнал</button></div></div></section><section class="panel" style="margin:0 0 18px;background:#f5fbf7;border-color:#cfe8d8"><div class="noticeRow"><div><b>⚡ Мгновенные события</b><div class="muted">Оповещение приходит в момент события и не зависит от того, на какой вкладке браузера сейчас находится сотрудник. В прототипе это имитируется через межвкладочный канал; в рабочей версии источник события — Bitrix24.</div></div><span class="tag green">Без обновления страницы</span></div></section><section class="panel" id="employeePanel" style="margin:0 0 18px;display:none;background:#f8fbff;border-color:#cfe0fb"><div class="nexthead"><div><h3 style="margin:0 0 4px">Моя очередь</h3><div class="muted" id="employeeSub">Карточки, назначенные вам как проверяющему</div></div><span class="priorityBadge" id="myCount">0 карточек</span></div><div id="myQueue"></div></section><section class="nextcard" id="nextCard"><div class="nexthead"><div class="nextlabel">Рекомендуется взять следующей</div><span class="priorityBadge" id="nextPriority">Приоритет 1</span></div><div class="nextbody"><div><div class="nexttitle" id="nextTitle">ЖК Северный парк</div><div class="nextmeta"><span class="type" id="nextType">СП</span><span class="muted" id="nextWait">Ожидает 12 мин</span><span class="tag red" id="nextStatus">Без проверяющего</span></div><div class="urgentline" id="nextReason">СП — самый высокий приоритет. Карточка уже ждёт больше 10 минут.</div></div><div class="nextactions"><button class="btn" onclick="takeRecommended()">Взять в работу</button><button class="btn outline" onclick="openRecommended()">Открыть карточку</button></div></div></section><div class="sortbar"><div><h3 style="margin:0 0 5px">Карточки, требующие внимания</h3><div class="muted">Сначала показываем те проверки, которые по процессу нужно взять быстрее.</div></div><div class="sortbox"><span>Сортировка:</span><select id="sortSelect" onchange="renderCards()"><option value="priority">По срочности проверки</option><option value="age">По времени ожидания</option></select></div></div><div class="priority"><b>Приоритет:</b> СП <span class="arrow">→</span> ПБ <span class="arrow">→</span> Секции / Первичные секции <span class="arrow">→</span> Актив <span class="arrow">→</span> остальные типы проверки</div><div class="grid"><section class="panel"><div id="cardsPanel"></div><div id="cardsPagination"></div></section><section class="panel"><h3>Как работает приоритет</h3><div class="legend"><div class="legenditem"><div class="num">1</div><p><b>СП</b><br><small>Самая высокая срочность — такие карточки идут первыми.</small></p></div><div class="legenditem"><div class="num">2</div><p><b>ПБ</b><br><small>Следующий уровень приоритета.</small></p></div><div class="legenditem"><div class="num">3</div><p><b>Секции и первичные секции</b><br><small>Обе разновидности объединены в один приоритет.</small></p></div><div class="legenditem"><div class="num">4</div><p><b>Актив</b><br><small>После секций, перед остальными проверками.</small></p></div><div class="legenditem"><div class="num">5</div><p><b>Остальные типы</b><br><small>Попадают в очередь после приоритетных проверок.</small></p></div></div><hr style="border:0;border-top:1px solid #edf0f2;margin:18px 0"><div class="muted">Внутри одного приоритета карточки сортируются по времени ожидания: старые — выше.</div></section></div></main></div><div class="specialistOverlay" id="specialistOverlay">
+  <div class="spHead" id="dragHandle"><div><b>◉ МОИ ПРОВЕРКИ</b> <span class="online">● Онлайн</span><span class="dragHint">· тяните мышью</span></div><div><button type="button" id="collapseSpecialistBtn" aria-label="Свернуть плашку" title="Свернуть" style="background:none;border:0;color:#fff;font-size:18px;line-height:1;padding:2px 6px;cursor:pointer">−</button></div></div>
+  <div class="spBody">
+    <div class="spSection" id="sec-need">
+      <div class="spSectionHead" data-section-toggle="sec-need" role="button" tabindex="0"><span><span class="chevron">▾</span>🔴 Нужно проверить</span><b id="needTotal">3</b></div>
+      <div class="spSectionBody">
+        <div class="spSub" data-sub-toggle="newMineList" role="button" tabindex="0" aria-expanded="true"><span><span class="chevron">▾</span>• 🆕 Новые</span><b id="newMineCount">2</b></div>
+        <div id="newMineList" class="spSubList"></div><div id="newMinePagination"></div>
+        <div class="spSub" data-sub-toggle="repeatMineList" role="button" tabindex="0" aria-expanded="true"><span><span class="chevron">▾</span>• 🔁 Повторные проверки</span><b id="repeatMineCount">1</b></div>
+        <div id="repeatMineList" class="spSubList"></div><div id="repeatMinePagination"></div>
+      </div>
+    </div>
+    <div class="spSection collapsed" id="sec-work"><div class="spSectionHead" data-section-toggle="sec-work" role="button" tabindex="0"><span><span class="chevron">▾</span>🔵 В работе</span><b id="workCount">2</b></div><div class="spSectionBody"><div id="workList"></div><div id="workPagination"></div></div></div>
+    <div class="spSection collapsed" id="sec-rework"><div class="spSectionHead" data-section-toggle="sec-rework" role="button" tabindex="0"><span><span class="chevron">▾</span>🟣 Доработка оператору</span><b id="reworkCount">2</b></div><div class="spSectionBody"><div id="reworkList"></div><div id="reworkPagination"></div></div></div>
+    <div class="spSection collapsed" id="sec-moderator"><div class="spSectionHead" data-section-toggle="sec-moderator" role="button" tabindex="0"><span><span class="chevron">▾</span>🩵 Вопрос модератору</span><b id="moderatorCount">1</b></div><div class="spSectionBody"><div id="moderatorList"></div><div id="moderatorPagination"></div></div></div>
+    <div class="spSection collapsed" id="sec-done"><div class="spSectionHead" data-section-toggle="sec-done" role="button" tabindex="0"><span><span class="chevron">▾</span>🟢 Заведение проверено <small>(за неделю)</small></span><b id="doneCount">5</b></div><div class="spSectionBody"><div id="doneList"></div><div id="donePagination"></div></div></div>
+  </div>
+  <div class="spFoot">Новые и повторные — со звуком · остальные статусы без звука</div><div class="spResizeHandle" id="spResizeHandle" role="button" aria-label="Изменить размер плашки" title="Потяните, чтобы изменить размер"></div>
+</div><button type="button" class="collapsedBadge" id="collapsedBadge" aria-label="Развернуть плашку">🔔 Мои проверки · <span id="collapsedCount">3</span></button><div class="toast" id="toast"><b id="toastTitle">Новое уведомление</b><p id="toastText"></p><small>Прототип · событие смоделировано</small></div><div class="modal" id="modal"><div class="modalbox"><h2 id="modalTitle">Карточка попала в «Новое»</h2><p id="modalText">Проверяющий пока не выбран. Карточку нужно взять в работу.</p><div class="cardinfo" id="modalCardInfo"><div class="infoitem"><span>ID дома</span><b id="modalNumber">123456</b></div><div class="infoitem"><span>ЖК</span><b id="modalZhK">ЖК Северный парк</b></div><div class="infoitem"><span>Очередь</span><b id="modalQueue">2 очередь</b></div><div class="infoitem"><span>Корпус</span><b id="modalCorpus">корпус 3</b></div><div class="infoitem"><span>Тип заведения контента</span><b id="modalType">СП</b></div><div class="infoitem full"><span>Карточка в процессе</span><a id="modalCardLink" href="#card-SP-02481">Открыть карточку в Bitrix24 →</a></div></div><div class="actions"><button class="btn secondary" onclick="closeModal()">Закрыть</button><a class="btn outline" id="modalOpenLink" href="#card-SP-02481">Открыть карточку</a><button class="btn" onclick="assign()">Взять в работу</button></div></div></div><script>
+const cards=[
+{id:1,houseId:'123456',title:'ЖК Северный парк',number:'99187',type:'СП',priority:1,age:12,repeat:false,checker:null,status:'Без проверяющего',tone:'red',queue:'2 очередь',corpus:'корпус 3',cardUrl:'#card-SP-02481'},
+{id:2,houseId:'654321',title:'ЖК Лесной квартал',number:'99214',type:'ПБ',priority:2,age:8,repeat:true,checker:'Анна',status:'Проверяющий: Анна',tone:'warn',queue:'1 очередь',corpus:'корпус 2',cardUrl:'#card-PB-01872'},
+{id:3,houseId:'345678',title:'ЖК Солнечный',number:'99301',type:'Секции',priority:3,age:17,repeat:true,checker:'Олег',status:'Проверяющий: Олег',tone:'warn',queue:'3 очередь',corpus:'корпус 4',cardUrl:'#card-SEK-01134'},
+{id:4,houseId:'456789',title:'ЖК Речной квартал',number:'99322',type:'Первичные секции',priority:3,age:6,repeat:true,checker:'Мария',status:'Проверяющий: Мария',tone:'warn',queue:'2 очередь',corpus:'корпус 2',cardUrl:'#card-PS-00916'},
+{id:5,houseId:'901234',title:'ЖК Парк у реки',number:'99410',type:'Актив',priority:4,age:14,repeat:true,checker:'Илья',status:'Проверяющий: Илья',tone:'green',queue:'1 очередь',corpus:'корпус 1',cardUrl:'#card-AKT-00642'},
+{id:6,houseId:'789012',title:'ЖК Зеленый бор',number:'99425',type:'Другое',priority:5,age:22,repeat:false,checker:'Елена',status:'Проверяющий: Елена',tone:'gray',queue:'1 очередь',corpus:'корпус 5',cardUrl:'#card-KON-00358'},
+{id:7,houseId:'100959',title:'ЖК Демонстрационный 1',number:'99507',type:'СП',priority:1,age:23,repeat:true,checker:'Анна',status:'Проверяющий: Анна',tone:'warn',queue:'2 очередь',corpus:'корпус 3',cardUrl:'#card-DEMO-07'},
+{id:8,houseId:'101096',title:'ЖК Демонстрационный 2',number:'99508',type:'ПБ',priority:2,age:2,repeat:true,checker:'Анна',status:'Проверяющий: Анна',tone:'warn',queue:'3 очередь',corpus:'корпус 4',cardUrl:'#card-DEMO-08'},
+{id:9,houseId:'101233',title:'ЖК Демонстрационный 3',number:'99509',type:'Секции',priority:3,age:5,repeat:false,checker:'Анна',status:'Проверяющий: Анна',tone:'warn',queue:'1 очередь',corpus:'корпус 5',cardUrl:'#card-DEMO-09'},
+{id:10,houseId:'101370',title:'ЖК Демонстрационный 4',number:'99510',type:'Первичные секции',priority:3,age:8,repeat:true,checker:'Анна',status:'Проверяющий: Анна',tone:'warn',queue:'2 очередь',corpus:'корпус 1',cardUrl:'#card-DEMO-10'},
+{id:11,houseId:'101507',title:'ЖК Демонстрационный 5',number:'99511',type:'Актив',priority:4,age:11,repeat:true,checker:'Анна',status:'Проверяющий: Анна',tone:'warn',queue:'3 очередь',corpus:'корпус 2',cardUrl:'#card-DEMO-11'},
+{id:12,houseId:'101644',title:'ЖК Демонстрационный 6',number:'99512',type:'Другое',priority:5,age:14,repeat:false,checker:'Анна',status:'Проверяющий: Анна',tone:'warn',queue:'1 очередь',corpus:'корпус 3',cardUrl:'#card-DEMO-12'},
+{id:13,houseId:'101781',title:'ЖК Демонстрационный 7',number:'99513',type:'СП',priority:1,age:17,repeat:true,checker:'Анна',status:'Проверяющий: Анна',tone:'warn',queue:'2 очередь',corpus:'корпус 4',cardUrl:'#card-DEMO-13'},
+{id:14,houseId:'101918',title:'ЖК Демонстрационный 8',number:'99514',type:'ПБ',priority:2,age:20,repeat:true,checker:'Анна',status:'Проверяющий: Анна',tone:'warn',queue:'3 очередь',corpus:'корпус 5',cardUrl:'#card-DEMO-14'},
+{id:15,houseId:'102055',title:'ЖК Демонстрационный 9',number:'99515',type:'Секции',priority:3,age:23,repeat:false,checker:'Анна',status:'Проверяющий: Анна',tone:'warn',queue:'1 очередь',corpus:'корпус 1',cardUrl:'#card-DEMO-15'},
+{id:16,houseId:'102192',title:'ЖК Демонстрационный 10',number:'99516',type:'Первичные секции',priority:3,age:2,repeat:true,checker:'Анна',status:'Проверяющий: Анна',tone:'warn',queue:'2 очередь',corpus:'корпус 2',cardUrl:'#card-DEMO-16'},
+{id:17,houseId:'102329',title:'ЖК Демонстрационный 11',number:'99517',type:'Актив',priority:4,age:5,repeat:true,checker:'Анна',status:'Проверяющий: Анна',tone:'warn',queue:'3 очередь',corpus:'корпус 3',cardUrl:'#card-DEMO-17'},
+{id:18,houseId:'102466',title:'ЖК Демонстрационный 12',number:'99518',type:'Другое',priority:5,age:8,repeat:false,checker:'Анна',status:'Проверяющий: Анна',tone:'warn',queue:'1 очередь',corpus:'корпус 4',cardUrl:'#card-DEMO-18'},
+{id:19,houseId:'102603',title:'ЖК Демонстрационный 13',number:'99519',type:'СП',priority:1,age:11,repeat:true,checker:'Анна',status:'Проверяющий: Анна',tone:'warn',queue:'2 очередь',corpus:'корпус 5',cardUrl:'#card-DEMO-19'},
+{id:20,houseId:'102740',title:'ЖК Демонстрационный 14',number:'99520',type:'ПБ',priority:2,age:14,repeat:true,checker:'Анна',status:'Проверяющий: Анна',tone:'warn',queue:'3 очередь',corpus:'корпус 1',cardUrl:'#card-DEMO-20'},
+{id:21,houseId:'102877',title:'ЖК Демонстрационный 15',number:'99521',type:'Секции',priority:3,age:17,repeat:false,checker:'Анна',status:'Проверяющий: Анна',tone:'warn',queue:'1 очередь',corpus:'корпус 2',cardUrl:'#card-DEMO-21'},
+{id:22,houseId:'103014',title:'ЖК Демонстрационный 16',number:'99522',type:'Первичные секции',priority:3,age:20,repeat:true,checker:'Анна',status:'Проверяющий: Анна',tone:'warn',queue:'2 очередь',corpus:'корпус 3',cardUrl:'#card-DEMO-22'},
+{id:23,houseId:'103151',title:'ЖК Демонстрационный 17',number:'99523',type:'Актив',priority:4,age:23,repeat:true,checker:'Анна',status:'Проверяющий: Анна',tone:'warn',queue:'3 очередь',corpus:'корпус 4',cardUrl:'#card-DEMO-23'},
+{id:24,houseId:'103288',title:'ЖК Демонстрационный 18',number:'99524',type:'Другое',priority:5,age:2,repeat:false,checker:'Анна',status:'Проверяющий: Анна',tone:'warn',queue:'1 очередь',corpus:'корпус 5',cardUrl:'#card-DEMO-24'},
+{id:25,houseId:'103425',title:'ЖК Демонстрационный 19',number:'99525',type:'СП',priority:1,age:5,repeat:true,checker:'Мария',status:'Проверяющий: Мария',tone:'warn',queue:'2 очередь',corpus:'корпус 1',cardUrl:'#card-DEMO-25'},
+{id:26,houseId:'103562',title:'ЖК Демонстрационный 20',number:'99526',type:'ПБ',priority:2,age:8,repeat:true,checker:'Илья',status:'Проверяющий: Илья',tone:'warn',queue:'3 очередь',corpus:'корпус 2',cardUrl:'#card-DEMO-26'},
+{id:27,houseId:'103699',title:'ЖК Демонстрационный 21',number:'99527',type:'Секции',priority:3,age:11,repeat:false,checker:'Олег',status:'Проверяющий: Олег',tone:'warn',queue:'1 очередь',corpus:'корпус 3',cardUrl:'#card-DEMO-27'},
+{id:28,houseId:'103836',title:'ЖК Демонстрационный 22',number:'99528',type:'Первичные секции',priority:3,age:14,repeat:true,checker:'Мария',status:'Проверяющий: Мария',tone:'warn',queue:'2 очередь',corpus:'корпус 4',cardUrl:'#card-DEMO-28'},
+{id:29,houseId:'103973',title:'ЖК Демонстрационный 23',number:'99529',type:'Актив',priority:4,age:17,repeat:true,checker:'Илья',status:'Проверяющий: Илья',tone:'warn',queue:'3 очередь',corpus:'корпус 5',cardUrl:'#card-DEMO-29'},
+{id:30,houseId:'104110',title:'ЖК Демонстрационный 24',number:'99530',type:'Другое',priority:5,age:20,repeat:false,checker:'Олег',status:'Проверяющий: Олег',tone:'warn',queue:'1 очередь',corpus:'корпус 1',cardUrl:'#card-DEMO-30'}
+];
+// Демонстрация: часть карточек находится вне нашей воронки, но остаётся закреплённой за специалистом.
+cards.forEach((c,i)=>{c.stageGroup=c.stageGroup || (c.checker ? (i%4===0?'work':'new') : 'new'); c.inOurFunnel=i%6!==0;});
+const checkerMemoryKey='bitrix-quality-checker-memory-v5';
+function checkerKey(c){return `${c.houseId}|${c.type}`;}
+function rememberChecker(c){try{const m=JSON.parse(localStorage.getItem(checkerMemoryKey)||'{}');m[checkerKey(c)]=c.checker;localStorage.setItem(checkerMemoryKey,JSON.stringify(m));}catch(_){} }
+function restoreChecker(c){if(c.checker)return c.checker;try{const m=JSON.parse(localStorage.getItem(checkerMemoryKey)||'{}');const v=m[checkerKey(c)];if(v){c.checker=v;c.assignedFromHistory=true;c.status=`Проверяющий: ${v}`;return v;}}catch(_){}return null;}
+cards.forEach(c=>{if(c.checker)rememberChecker(c);else restoreChecker(c);});
+function createDuplicateCard(baseId){const base=cards.find(c=>c.id===baseId);if(!base)return;const c={...base,id:Math.max(...cards.map(x=>Number(x.id)||0))+1,cardUrl:`#card-DUP-${Date.now()}`,repeat:false,age:0,stageGroup:'new',status:'Проверяющий: не выбран',tone:'red'};const prev=restoreChecker(c);if(prev){c.status=`Проверяющий: ${prev}`;c.tone='warn';}cards.unshift(c);renderRole();showToast(prev?'♻️ Дубликат карточки':'🆕 Новая карточка',prev?`Дубликат откроется с ранее выбранным проверяющим: ${prev}.`:'Для новой карточки проверяющий пока не выбран.');}
+let currentUser='head',cycle=1;
+const headName='Руководитель отдела качества';
+let soundEnabled=true;
+let audioCtx=null;
+function playAlert(){
+ if(!soundEnabled)return;
+ try{
+   audioCtx=audioCtx||new (window.AudioContext||window.webkitAudioContext)();
+   const now=audioCtx.currentTime;
+   // Чуть более длинный и заметный «противный» сигнал — около 1,5 секунды.
+   // Несколько повторяющихся тонов помогают не пропустить уведомление.
+   [[880,0],[660,0.18],[880,0.36],[660,0.54],[880,0.72],[660,0.90],[990,1.08]].forEach(([freq,offset])=>{
+     const o=audioCtx.createOscillator(), g=audioCtx.createGain();
+     o.type='square'; o.frequency.value=freq;
+     g.gain.setValueAtTime(0.0001,now+offset);
+     g.gain.exponentialRampToValueAtTime(0.12,now+offset+0.012);
+     g.gain.exponentialRampToValueAtTime(0.0001,now+offset+0.13);
+     o.connect(g); g.connect(audioCtx.destination);
+     o.start(now+offset); o.stop(now+offset+0.14);
+   });
+ }catch(e){}
+}
+function testSound(){
+ requestDesktopNotifications();
+ soundEnabled=true;
+ updateSoundUI();
+ playAlert();
+ showToast('🔊 Тест звука','Вот примерно такой короткий сигнал будет сопровождать важное оповещение.');
+}
+function toggleSound(){soundEnabled=!soundEnabled;updateSoundUI();if(soundEnabled)playAlert();}
+function updateSoundUI(){
+ soundBtn.textContent=soundEnabled?'🔊 Звук: ВКЛ':'🔇 Звук: ВЫКЛ';
+ soundState.textContent=soundEnabled?'Звук включён':'Звук выключен';
+ soundState.className='tag '+(soundEnabled?'warn':'gray');
+}
+function showToast(t,txt,withSound=false){toastTitle.textContent=t;toastText.textContent=txt;toast.classList.add('show');if(withSound)playAlert();clearTimeout(window.__toastTimer);window.__toastTimer=setTimeout(()=>toast.classList.remove('show'),6000)}
+
+// Событийная модель прототипа: вкладки браузера получают событие без обновления страницы.
+// В реальной интеграции этот канал заменяется серверным событием от Bitrix24 (webhook/WebSocket/SSE).
+const EVENT_KEY='bitrix-quality-event-v4';
+const tabId=Math.random().toString(36).slice(2);
+let eventChannel=null;
+try{eventChannel=new BroadcastChannel('bitrix-quality-events');eventChannel.onmessage=e=>{if(e.data && e.data.source!==tabId)handleExternalEvent(e.data)}}catch(e){}
+window.addEventListener('storage',e=>{if(e.key===EVENT_KEY && e.newValue){try{const data=JSON.parse(e.newValue);if(data.source!==tabId)handleExternalEvent(data)}catch(_){} } });
+function requestDesktopNotifications(){if('Notification' in window && Notification.permission==='default')Notification.requestPermission().catch(()=>{});}
+function emitQualityEvent(kind,c){const data={source:tabId,kind,card:{id:c.id,houseId:c.houseId,title:c.title,type:c.type,queue:c.queue,corpus:c.corpus,checker:c.checker||'',repeat:!!c.repeat,inOurFunnel:c.inOurFunnel!==false,assignedFromHistory:!!c.assignedFromHistory,cardUrl:c.cardUrl},ts:Date.now()};try{eventChannel?.postMessage(data)}catch(_){};try{localStorage.setItem(EVENT_KEY,JSON.stringify(data));localStorage.removeItem(EVENT_KEY)}catch(_){};handleExternalEvent(data);}
+function handleExternalEvent(data){const c=data.card||{};const title=data.kind==='repeat'?'🔁 Повторная проверка':'🔔 Новая карточка в «Новое»';const txt=`${c.houseId||''} · ${c.title||''} · ${c.queue||''} · ${c.corpus||''} · ${c.type||''}${c.checker?` · проверяющий: ${c.checker}`:''}`;showToast(title,txt,true);if('Notification' in window && Notification.permission==='granted'){try{new Notification(title,{body:txt,tag:'bitrix-quality-'+c.id})}catch(_){} } }
+
+function getSortedCards(){const mode=document.getElementById('sortSelect').value;return [...cards].sort((a,b)=>mode==='priority'?(a.priority-b.priority||b.age-a.age):(b.age-a.age||a.priority-b.priority))}
+function changeUser(){currentUser=document.getElementById('userSelect').value;renderRole();}
+function itemMarkup(c,label){return `<div class="spItem" onclick="openCard('${c.cardUrl}')"><div class="spItemTitle">${c.houseId} · ${c.title} · ${c.queue} · ${c.corpus} · ${c.type}</div><div class="spItemMeta"><span>${label}</span><a href="${c.cardUrl}" onclick="event.stopPropagation()">Открыть карточку →</a></div></div>`}
+function emptyState(label){return `<div class="empty">${label} · 0</div>`;}
+const PAGE_SIZE=20;
+const specialistPages={new:1,repeat:1,work:1,rework:1,moderator:1,done:1};
+let mainPage=1;
+function paginationHtml(total,page,onClick,small=false){
+ const pages=Math.max(1,Math.ceil(total/PAGE_SIZE));
+ page=Math.min(Math.max(1,page),pages);
+ if(pages<=1)return `<div class="${small?'spPagination':'pagination'}"><span class="${small?'spPageInfo':'pageinfo'}">Страница ${page} из ${pages}</span></div>`;
+ let h=`<div class="${small?'spPagination':'pagination'}">`;
+ h+=`<button type="button" class="${small?'spPageBtn':'pagebtn'}" ${page===1?'disabled':''} onclick="${onClick}(${page-1})">‹</button>`;
+ for(let i=1;i<=pages;i++) h+=`<button type="button" class="${small?'spPageBtn':'pagebtn'} ${i===page?'active':''}" onclick="${onClick}(${i})">${i}</button>`;
+ h+=`<span class="${small?'spPageInfo':'pageinfo'}">Страница ${page} из ${pages}</span>`;
+ h+=`<button type="button" class="${small?'spPageBtn':'pagebtn'}" ${page===pages?'disabled':''} onclick="${onClick}(${page+1})">›</button></div>`;
+ return h;
+}
+function renderPagedInto(listId,paginationId,items,page,labelBuilder,key,emptyLabel){
+ const list=document.getElementById(listId), pag=document.getElementById(paginationId);
+ const total=items.length, pages=Math.max(1,Math.ceil(total/PAGE_SIZE));
+ page=Math.min(Math.max(1,page),pages);
+ const start=(page-1)*PAGE_SIZE;
+ const visible=items.slice(start,start+PAGE_SIZE);
+ list.innerHTML=visible.length?visible.map(x=>typeof labelBuilder==='function'?labelBuilder(x):itemMarkup(x,labelBuilder)).join(''):emptyState(emptyLabel||labelBuilder);
+ pag.innerHTML=paginationHtml(total,page,`setSpecialistPage('${key}'`,true);
+}
+function setSpecialistPage(key,page){specialistPages[key]=Math.max(1,Number(page)||1);renderSpecialistPanel();}
+function renderSpecialistPanel(){
+ const mine=cards.filter(c=>c.checker===currentUser && c.specialistVisible!==false);
+ // Важно: карточка может физически находиться вне нашей воронки. Для специалиста она всё равно
+ // остаётся видимой, если в карточке сохранён этот проверяющий. Системные статусы ниже намеренно пустые.
+ const fresh=mine.filter(c=>!c.repeat && c.stageGroup==='new');
+ const repeats=mine.filter(c=>c.repeat && c.stageGroup==='new');
+ const work=mine.filter(c=>c.stageGroup==='work');
+ const auxiliary=currentUser==='Анна';
+ const reworkItems=auxiliary?[
+   {id:'REWORK-1',houseId:'456789',title:'ЖК Речной квартал',queue:'2 очередь',corpus:'корпус 3',type:'СП',text:`456789 · ЖК Речной квартал · 2 очередь · корпус 3 · СП`,label:'🟣 Ждёт доработки оператора',cardUrl:'#card-REWORK-1'},
+   {id:'REWORK-2',houseId:'789012',title:'ЖК Зеленый бор',queue:'2 очередь',corpus:'корпус 2',type:'ПБ',text:'789012 · ЖК Зеленый бор · 2 очередь · корпус 2 · ПБ',label:'🟣 Ждёт доработки',cardUrl:'#card-REWORK-2'}
+ ]:[];
+ // В текущем сценарии здесь специально нет карточек: эти статусы не являются очередью проверки.
+ const moderatorItems=[];
+ const doneItems=[];
+ document.getElementById('needTotal').textContent=fresh.length+repeats.length;
+ document.getElementById('newMineCount').textContent=fresh.length;
+ document.getElementById('repeatMineCount').textContent=repeats.length;
+ renderPagedInto('newMineList','newMinePagination',fresh,specialistPages.new,'🆕 Новая · требует проверки','new','Нет новых проверок');
+ renderPagedInto('repeatMineList','repeatMinePagination',repeats,specialistPages.repeat,'🔁 Повторная · требует проверки','repeat','Нет повторных проверок');
+ document.getElementById('workCount').textContent=work.length;
+ renderPagedInto('workList','workPagination',work,specialistPages.work,'🔵 В работе','work','Нет карточек в работе');
+ document.getElementById('reworkCount').textContent=reworkItems.length;
+ renderPagedInto('reworkList','reworkPagination',reworkItems,x=>`<div class="spItem" onclick="openCard('${x.cardUrl}')"><div class="spItemTitle">${x.text}</div><div class="spItemMeta"><span>${x.label}</span><a href="${x.cardUrl}" onclick="event.stopPropagation()">Открыть карточку →</a></div></div>`,'rework','Нет задач на доработку');
+ document.getElementById('moderatorCount').textContent=0;
+ renderPagedInto('moderatorList','moderatorPagination',moderatorItems,x=>`<div class="spItem" onclick="openCard('${x.cardUrl}')"><div class="spItemTitle">${x.text}</div><div class="spItemMeta"><span>${x.label}</span><a href="${x.cardUrl}" onclick="event.stopPropagation()">Открыть карточку →</a></div></div>`,'moderator','Нет вопросов модератору');
+ document.getElementById('doneCount').textContent=0;
+ renderPagedInto('doneList','donePagination',doneItems,x=>`<div class="spItem" onclick="openCard('${x.cardUrl}')"><div class="spItemTitle">${x.text}</div><div class="spItemMeta"><span>${x.label}</span><a href="${x.cardUrl}" onclick="event.stopPropagation()">Открыть карточку →</a></div></div>`,'done','Нет проверенных за текущую неделю');
+ document.getElementById('collapsedCount').textContent=fresh.length+repeats.length;
+}
+function openCard(url){window.location.hash=url.replace('#','');const c=cards.find(x=>x.cardUrl===url);showToast('↗ Карточка', c&&c.checker?`Открываем карточку в Bitrix24 · проверяющий: ${c.checker}. Поле проверяющего сохраняется.`:'Открываем карточку проверки в Bitrix24.');}
+function toggleSpecialistPanel(){
+ const p=document.getElementById('specialistOverlay'), b=document.getElementById('collapsedBadge');
+ const willShow=!p.classList.contains('show');
+ p.classList.toggle('show',willShow);
+ b.classList.toggle('show',!willShow);
+}
+function toggleSection(id){
+ const el=document.getElementById(id);
+ if(!el)return;
+ el.classList.toggle('collapsed');
+}
+function toggleSubSectionByList(listId, header){
+ const list=document.getElementById(listId);
+ if(!list || !header)return;
+ const collapsed=header.classList.toggle('is-collapsed');
+ header.setAttribute('aria-expanded', String(!collapsed));
+ list.hidden=collapsed;
+}
+function bindCollapseControls(){
+ document.querySelectorAll('[data-section-toggle]').forEach(header=>{
+   const id=header.getAttribute('data-section-toggle');
+   const activate=e=>{ if(e.type==='keydown' && e.key!=='Enter' && e.key!==' ') return; e.preventDefault(); e.stopPropagation(); toggleSection(id); };
+   header.addEventListener('click',activate);
+   header.addEventListener('keydown',activate);
+ });
+ document.querySelectorAll('[data-sub-toggle]').forEach(header=>{
+   const listId=header.getAttribute('data-sub-toggle');
+   const activate=e=>{ if(e.type==='keydown' && e.key!=='Enter' && e.key!==' ') return; e.preventDefault(); e.stopPropagation(); toggleSubSectionByList(listId,header); };
+   header.addEventListener('click',activate);
+   header.addEventListener('keydown',activate);
+ });
+}
+function focusSection(id){const el=document.getElementById(id==='new'?'newMineList':id==='repeat'?'repeatMineList':id==='work'?'workList':id==='rework'?'reworkList':id==='moderator'?'moderatorList':'doneList');if(el)el.scrollIntoView({behavior:'smooth',block:'center'});}
+function renderRole(){
+ const employee=currentUser!=='head';
+ document.querySelector('.top .muted').textContent=employee?'Вы вошли как проверяющий':'Пользователь:';
+ employeePanel.style.display='none';
+ nextCard.style.display=employee?'none':'block';
+ document.getElementById('specialistOverlay').classList.toggle('show',employee);
+ document.getElementById('collapsedBadge').classList.remove('show');
+ if(employee){renderMyQueue();renderSpecialistPanel();}
+ renderCards();
+}
+function renderMyQueue(){
+ const mine=cards.filter(c=>c.checker===currentUser).sort((a,b)=>b.age-a.age);
+ myCount.textContent=`${mine.length} ${mine.length===1?'карточка':'карточки'}`;
+ if(!mine.length){myQueue.innerHTML='<div class="empty">Пока нет назначенных карточек.</div>';return}
+ myQueue.innerHTML=mine.map(c=>`<div class="mycard"><div class="noticeRow"><div><b>${c.title}</b><div class="muted">${c.type} · «Новое» · ${c.repeat?'повторная проверка':'новая проверка'} · ожидает ${c.age} мин</div></div><span class="tag ${c.age>=10?'red':'warn'}">${c.age>=10?'Срочно':'В очереди'}</span></div><div class="actions" style="justify-content:flex-start;margin-top:10px"><button class="btn" onclick="takeMyCard(${c.id})">Взять в работу</button><button class="btn secondary" onclick="notifyRecheck(${c.id})">Симулировать повторное оповещение</button></div></div>`).join('');
+}
+function renderNext(list){const c=list[0];if(!c){nextCard.style.display='none';return}nextCard.style.display='block';nextTitle.textContent=c.title;nextType.textContent=c.type;nextPriority.textContent=`Приоритет ${c.priority}`;nextWait.textContent=`Ожидает ${c.age} мин`;nextStatus.textContent=c.status;nextStatus.className=`tag ${c.tone||''}`;nextReason.textContent=c.priority===1?`СП — самый высокий приоритет. ${c.age>=10?'Карточка уже ждёт больше 10 минут.':'Берём в работу раньше остальных типов.'}`:`Приоритет ${c.priority}. В очереди выше неё есть более срочные проверки.`}
+function setMainPage(page){mainPage=Math.max(1,Number(page)||1);renderCards();}
+function renderCards(){const list=getSortedCards();const pages=Math.max(1,Math.ceil(list.length/PAGE_SIZE));mainPage=Math.min(mainPage,pages);const visible=list.slice((mainPage-1)*PAGE_SIZE,mainPage*PAGE_SIZE);if(currentUser==='head')renderNext(list);cardsPanel.innerHTML=visible.map((c,i)=>{const rank=(mainPage-1)*PAGE_SIZE+i+1;return `<div class="row"><div class="rowmain"><div class="rank">${rank}</div><div><div class="rowtitle"><b>${c.title}</b><span class="type">${c.type}</span></div><div class="muted">${c.houseId} · ${c.title} · ${c.queue} · ${c.corpus} · ${c.type}</div><div class="muted">${c.type} · Новое · ${c.repeat?'повторная проверка':'новая проверка'}</div><div class="urgentline">Приоритет ${c.priority} · ожидает ${c.age} мин · ${c.checker?'проверяющий: '+c.checker:'проверяющий не выбран'} · <a href="${c.cardUrl}" style="color:#2067d8;font-weight:700;text-decoration:none">Открыть карточку →</a></div></div></div><span class="tag ${c.tone||''} ${c.age>=10?'pulse':''}">${c.status}</span></div>`}).join('');document.getElementById('cardsPagination').innerHTML=paginationHtml(list.length,mainPage,'setMainPage',false);}
+function takeRecommended(){const c=getSortedCards()[0];if(!c)return;if(!c.checker){c.checker='Анна';c.status='Проверяющий: Анна';c.tone='warn';showToast('🔔 Анна получила уведомление',`Карточка «${c.title}» взята в работу. Руководитель и назначенный проверяющий уведомлены.`);renderCards();}else showToast('👤 Карточка уже назначена',`${c.title}: проверяющий — ${c.checker}.`)}
+function takeMyCard(id){const c=cards.find(x=>x.id===id);showToast('▶️ Вы взяли карточку в работу',`«${c.title}» (${c.type}). В реальном Bitrix24 карточка перейдёт из «Новое» в «В работе».`);}
+function openRecommended(){const c=getSortedCards()[0];window.location.hash=c.cardUrl.replace('#','');showToast('↗ Карточка',`Открываем ${c.number}: ${c.title}. В реальном приложении здесь будет прямая ссылка на карточку в процессе Bitrix24.`)}
+function fillModalCard(c){modalNumber.textContent=c.houseId;modalZhK.textContent=c.title;modalQueue.textContent=c.queue;modalCorpus.textContent=c.corpus;modalType.textContent=c.type;modalCardLink.href=c.cardUrl;modalOpenLink.href=c.cardUrl}
+function simulateNew(){cycle++;const c=cards[0];c.age=0;c.repeat=cycle>1;c.status=c.checker?`Проверяющий: ${c.checker}`:'Без проверяющего';modalTitle.textContent=cycle>1?'Повторный вход в «Новое»':'Карточка попала в «Новое»';modalText.textContent=cycle>1?`Новый цикл после доработки. ${c.checker?'Текущий проверяющий '+c.checker+' сохраняется, поэтому он и руководитель получают новое уведомление.':'Проверяющий ещё не выбран — уведомление получает руководитель.'}`:'Проверяющий пока не выбран. Руководитель получает уведомление и запускается контроль 10 минут.';fillModalCard(c);modal.classList.add('show');emitQualityEvent(c.repeat?'repeat':'new',c);showToast(c.checker?'🔔 Повторная проверка':'🔔 Новая карточка в «Новое»',c.checker?`Уведомление руководителю и ${c.checker}: карточка снова поступила на проверку.`:'Уведомление руководителю: карточка ожидает, пока сотрудник возьмёт её в работу.',false);renderCards();}
+function assign(){const c=cards[0];c.checker='Анна';c.assignedFromHistory=true;c.status='Проверяющий: Анна';c.tone='warn';rememberChecker(c);closeModal();showToast('👤 Проверяющий выбран','Руководителю и Анне отправлено уведомление. Проверяющий сохранён для повторных/дублирующих карточек.');renderRole();}
+function notifyRecheck(id){const c=cards.find(x=>x.id===id);showToast('🔁 Повторная проверка',`Новое оповещение для ${c.checker}: «${c.title}» снова вернулась в «Новое». Руководитель также получил уведомление.`)}
+function closeModal(){modal.classList.remove('show')}
+function savePanelGeometry(){const p=document.getElementById('specialistOverlay');const r=p.getBoundingClientRect();try{localStorage.setItem('quality-panel-geometry',JSON.stringify({left:r.left,top:r.top,width:r.width,height:r.height}))}catch(_){} }
+function restorePanelGeometry(){const p=document.getElementById('specialistOverlay');try{const g=JSON.parse(localStorage.getItem('quality-panel-geometry')||'null');if(!g)return;p.style.left=Math.max(6,Math.min(window.innerWidth-g.width-6,g.left))+'px';p.style.top=Math.max(6,Math.min(window.innerHeight-g.height-6,g.top))+'px';p.style.right='auto';p.style.bottom='auto';p.style.width=Math.max(300,Math.min(620,g.width))+'px';p.style.height=Math.max(220,Math.min(window.innerHeight-24,g.height))+'px';p.style.maxHeight='calc(100vh - 24px)'}catch(_){} }
+
+// Перемещение плашки мышью: зажмите левую кнопку на синей шапке и перетащите.
+(function initDrag(){
+ const panel=document.getElementById('specialistOverlay');
+ const handle=document.getElementById('dragHandle');
+ const collapsed=document.getElementById('collapsedBadge');
+ const collapseBtn=document.getElementById('collapseSpecialistBtn');
+ let dragging=false, ox=0, oy=0;
+ function start(el,e){
+   if(e.button!==0 || e.target.closest('button,a')) return;
+   const r=el.getBoundingClientRect();
+   dragging=true; ox=e.clientX-r.left; oy=e.clientY-r.top;
+   el.style.left=r.left+'px'; el.style.top=r.top+'px'; el.style.right='auto'; el.style.bottom='auto';
+   if(el===panel) handle.classList.add('dragging');
+   e.preventDefault();
+ }
+ function move(e){
+   if(!dragging)return;
+   const el=panel.classList.contains('show')?panel:collapsed;
+   const w=el.offsetWidth,h=el.offsetHeight;
+   const x=Math.max(6,Math.min(window.innerWidth-w-6,e.clientX-ox));
+   const y=Math.max(6,Math.min(window.innerHeight-h-6,e.clientY-oy));
+   el.style.left=x+'px'; el.style.top=y+'px'; el.style.right='auto'; el.style.bottom='auto';
+ }
+ function stop(){
+   if(!dragging)return; dragging=false; handle.classList.remove('dragging'); savePanelGeometry();
+ }
+ handle.addEventListener('pointerdown',e=>{ if(e.target.closest('button,a')) return; handle.setPointerCapture?.(e.pointerId); start(panel,e); });
+ collapseBtn.addEventListener('pointerdown',e=>e.stopPropagation());
+ collapseBtn.addEventListener('click',e=>{e.preventDefault();e.stopPropagation();toggleSpecialistPanel();});
+ collapsed.addEventListener('pointerdown',e=>{collapsed.setPointerCapture?.(e.pointerId);start(collapsed,e)});
+ collapsed.addEventListener('click',e=>{if(dragging)return;e.preventDefault();toggleSpecialistPanel();});
+ window.addEventListener('pointermove',move); window.addEventListener('pointerup',stop); window.addEventListener('pointercancel',stop);
+})();
+
+// Изменение размера плашки: тяните за угол в правом нижнем углу.
+(function initResize(){
+ const panel=document.getElementById('specialistOverlay');
+ const handle=document.getElementById('spResizeHandle');
+ if(!panel || !handle) return;
+ let resizing=false, startX=0, startY=0, startW=0, startH=0;
+ const minW=300, minH=220, maxW=620, maxH=window.innerHeight-24;
+ handle.addEventListener('pointerdown',e=>{
+   if(e.button!==0) return;
+   e.preventDefault(); e.stopPropagation();
+   const r=panel.getBoundingClientRect();
+   startX=e.clientX; startY=e.clientY; startW=r.width; startH=r.height; resizing=true;
+   handle.setPointerCapture?.(e.pointerId);
+ });
+ window.addEventListener('pointermove',e=>{
+   if(!resizing) return;
+   const w=Math.max(minW,Math.min(maxW,startW+(e.clientX-startX)));
+   const h=Math.max(minH,Math.min(maxH,startH+(e.clientY-startY)));
+   panel.style.width=w+'px';
+   panel.style.height=h+'px';
+   panel.style.maxHeight='calc(100vh - 24px)';
+ });
+ const stop=()=>{if(resizing){resizing=false;savePanelGeometry();}};
+ window.addEventListener('pointerup',stop);
+ window.addEventListener('pointercancel',stop);
+})();
+
+bindCollapseControls();
+restorePanelGeometry();
+renderRole();
+setTimeout(()=>showToast('⏱ Напоминание','«ЖК Северный парк» находится в «Новое» более 10 минут. Руководитель получает напоминание; после назначения проверяющего напоминания получают оба.'),1200);
+</script></body></html>
